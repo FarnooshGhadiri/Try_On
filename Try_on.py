@@ -42,6 +42,7 @@ def main():
    logging.getLogger().addHandler(ch)
    log_level = logging.INFO
    logging.getLogger().setLevel(log_level)
+   print("this is a new change")
 
 
 
