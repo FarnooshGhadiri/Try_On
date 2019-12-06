@@ -5,8 +5,10 @@ class Options():
 
    def __init__(self):
        self.parser = argparse.ArgumentParser(formatter_class=argparse.ArgumentDefaultsHelpFormatter)
+       self.parser.add_argument('--num_example',type='int',default='1000',help='number of data in dataset')
        self.parser.add_argument('--data_dir', default='/data/', help="path to the test/train data")
        self.parser.add_argument('--batch_size', type='int',default='64')
+       self.parser.add_argument('--num_workers',type='int',default='4',help="How many subprocess to use for data loading")
        self.parser.add_argument('--mode',default='train',choises=['train','test','validate'])
        self.parser.add_argument('--name',default='my_experiment',help="name of your experiment")
        self.parser.add_argument('--model',default='resnet18',help="what type of network should be used")
