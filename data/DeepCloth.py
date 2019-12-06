@@ -10,9 +10,10 @@ import torchvision.transforms as Transform
 
 class Try_On_dataset(Dataset):
 
-  def __init__(self,root,bboxes, dataAug=False, Img_size=256,Crop_size=224, mean=0.5, std=0.5):
-      super(GetData,self).__init__()
+  def __init__(self,root,indices, dataAug=False, Img_size=256,Crop_size=224, mean=0.5, std=0.5):
+      super(Try_On_dataset,self).__init__()
       self.root_Img = ("%sImg") % root
+      self.indices = indices
       self.root_Clt_seg = ("%sCloth_Seg") % root
       self.root_Prt_seg = ("%sPart_Seg") % root
       self.get_file_name()
@@ -52,4 +53,4 @@ class Try_On_dataset(Dataset):
 
 
   def __len__(self):
-      return len(self.filenames)
+      return len(self.indices)
