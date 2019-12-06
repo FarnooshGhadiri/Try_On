@@ -2,6 +2,7 @@
 from torch.utils.data import dataloader
 from data.DeepCloth import Try_On_dataset
 from options import options
+import numpy as np
 import logging
 import os
 from util import util
@@ -42,7 +43,27 @@ def main():
    logging.getLogger().addHandler(ch)
    log_level = logging.INFO
    logging.getLogger().setLevel(log_level)
-   print("this is a new change")
+    #define database
+   indices = list(range(opt.num_example))
+   rand_indices = np.random.RandomState(0)
+   rand_indices.shuffle(indices)
+   train_idx = indices[0:0.9*len(indices)]
+   valid_idx = indices[0.9*len(indices)::]
+   ds_train = Try_On_dataset(root=opt.data_dir,
+                                  indices=train_idx,
+                                  data_aug=opt.data_aug,
+                                  img_size=opt.img_size,
+                                  crop_size=opt.crop_size)
+   ds_valid = Try_On_dataset(root=opt.data_dir,
+                                  indices=valid_idx,
+                                  data_aug=opt.data_aug,
+                                  img_size=opt.img_size,
+                                  crop_size=opt.crop_size)
+   loader_train = dataloader(ds_train,shuffel=True,batch_size=opt.batch_size,num_workers=opt.num_wokers)
+   loader_valid = dataloader(ds_valid,shuffel=True,batch_size=opt.batch_size,num_workers=opt.num_wokers)
+   #load model
+
+
 
 
 
