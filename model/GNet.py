@@ -1,9 +1,7 @@
 import torch
 import functools
 from torch import nn
-class Decoder(nn.Module):
-    def __init__(self):
-        super(Decoder,self).__init__()
+
 
 class Generator(nn.Module):
     def __init__(self, sourceImg_nc,targetImg_nc, output_nc=3,
@@ -82,14 +80,18 @@ class Generator(nn.Module):
 
     def forward(self,source_features,target_features):
         batch_size = source_features.data.size(0)
-        if self.fuse_mode == 'cat':
-            features = torch.cat(source_features,target_features,dim=1)
-        elif self.fuse_mode =='add':
-            features = self.w_source_feature(source_features.view(batch_size,-1))+\
+        if target_features == 0:
+            # decoding each branch separately
+            fake_features = source_features
+        else:
+            if self.fuse_mode == 'cat':
+                features = torch.cat(source_features,target_features,dim=1)
+            elif self.fuse_mode == 'add':
+                features = self.w_source_feature(source_features.view(batch_size,-1))+\
                        self.w_target_feature(target_features.view(batch_size,-1))
-            features = features.view(batch_size,-1,1,1)
+                features = features.view(batch_size,-1,1,1)
 
-        fake_features = self. dc_avg(features)
+            fake_features = self. dc_avg(features)
         cnlayers = self.connect_layers
         ######if we have our own Encoder instead of resnet
         ###fake_feature_5, cnlayers = self.decode(self.de_conv5, fake_feature, en_feature_5, cnlayers)
@@ -98,7 +100,7 @@ class Generator(nn.Module):
         fake_features_3 = self.dc_conv3(fake_features_4)
         fake_features_2 = self.dc_conv2(fake_features_3)
         fake_features_1 = self.dc_conv1(fake_features_2)
-        fake_img =fake_features_1
+        fake_img = fake_features_1
         return fake_img
 
 
